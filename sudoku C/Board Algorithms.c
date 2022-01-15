@@ -54,7 +54,7 @@ void FillBoard(int seed, Board* board)
 
 
 				//display numbers changing in realtime
-				printf("\033[H");
+				printf("\033[H\033[J");
 
 				printf("Filling Board...\n");
 
@@ -133,12 +133,15 @@ void FillBoard(int seed, Board* board)
 bool BoardSolvable(Board* board)
 {
 
-	Board* boardCopy = malloc(sizeof(Board));
+	Board* boardCopy = malloc(sizeof(Board)); //create an empty board
 
-	ResetBoard(boardCopy);
+	ResetBoard(boardCopy); //fill board with all 0s
 
-	memcpy(boardCopy, board, sizeof(Board));
+	memcpy(boardCopy, board, sizeof(Board)); //copy board over to the copy of the board
 
+
+	//  \033[h - set cursor position to top left
+	//  \033[j - clear screen from cursor to end of console
 	printf("\033[H\033[J");
 
 	for (int row = 0; row < RC_SIZE; row++)
