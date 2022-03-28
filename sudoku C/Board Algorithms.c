@@ -4,7 +4,6 @@
 
 void FillBoard(int seed, Board* board)
 {
-
 	srand(seed);
 
 	//counter to check how many times we backtracked to previous cell
@@ -18,44 +17,33 @@ void FillBoard(int seed, Board* board)
 	//iterate over rows and columns in the board
 	for (int row = 0; row < 9; row++)
 	{
-
 		for (int col = 0; col < 9; col++)
 		{
-
 			//arbitrary number between 0 and 8 to be modified later
 			int num = rand() % 9;
-
 
 			//cell at the current index
 			int* cell = GetIndex(row, col, board);
 
-
 			//if the cell already has a number because of backtracking, set the arbitrary number to its value
 			if (*cell != 0)
 			{
-
 				num = *cell;
-
 			}
-
 
 			//bool to check if there is a valid number for the cell - if false we backtrack to last cell
 			bool cellValid = false;
 
-
 			//iterate over possible values for a cell
 			for (int i = 0; i < 9; i++)
 			{
-
 				//modified number for each iteration, doing this allows it to increment by 1 and wrap around to 1 after reaching 9
 				int modNum = ((num + i) % 9) + 1;
 
 				*cell = modNum;
 
-
 				//display numbers changing in realtime
 				printf("\033[H\033[J");
-
 				printf("Filling Board...\n");
 
 				PrintBoard(board);
@@ -68,30 +56,23 @@ void FillBoard(int seed, Board* board)
 				//check if cell is valid using modified number
 				if (CellValid(row, col, modNum, board))
 				{
-
 					cellValid = true;
 
 					//set current cell to the current modified number and continue to next cell
 					*cell = modNum;
 					break;
-
 				}
-
 			}
-
 
 
 			//backtrack if no valid number for current cell
 			if (!cellValid)
 			{
-
 				tries++;
-
 
 				//keep backtracking if there continues to be no valid state for a cell
 				for (int i = 0; i < floor(tries / 4) + 2; i++)
 				{
-
 					//zero out the cells between the furthest cell we visited, and the cell we backtrack to
 					cell = GetIndex(row, col, board);
 					*cell = 0;
@@ -106,13 +87,10 @@ void FillBoard(int seed, Board* board)
 						row--;
 						col = 8;
 					}
-
 				}
-
 			}
 			else
 			{
-
 				//check to see if this is the furthest cell we visited
 				if (row > bRow || (col > bCol && bRow == row))
 				{
@@ -120,19 +98,14 @@ void FillBoard(int seed, Board* board)
 					bCol = col;
 					tries = 0;
 				}
-
 			}
-
 		}
-
 	}
-
 }
 
 
 bool BoardSolvable(Board* board)
 {
-
 	Board* boardCopy = malloc(sizeof(Board)); //create an empty board
 
 	ResetBoard(boardCopy); //fill board with all 0s
@@ -146,7 +119,6 @@ bool BoardSolvable(Board* board)
 
 	for (int row = 0; row < RC_SIZE; row++)
 	{
-
 		for (int col = 0; col < RC_SIZE; /*increment col after checking if current cell is valid towards end of loop*/)
 		{
 			//continue if cell contains clue
@@ -165,7 +137,6 @@ bool BoardSolvable(Board* board)
 			//check for possible values in cell
 			for (int i = *cell + 1; i <= 9; i += 1)
 			{
-
 				printf("\033[H"); //reset console cursor position to top left
 
 				printf("Checking for Possible Solutions... \n");
@@ -182,14 +153,12 @@ bool BoardSolvable(Board* board)
 					cellValid = true;
 					break;
 				}
-
 			}
 
 
 			//check if cell has no valid value
 			if (!cellValid)
 			{
-				
 				//reset value of cell if no valid value
 				*cell = 0;
 
@@ -219,22 +188,16 @@ bool BoardSolvable(Board* board)
 						break;
 
 					}
-
 				}
-
 			}
 			else
 			{
 				col++; //increment column if current cell is valid
 			}
-
 		}
-
 	}
-
-
+	
 	return true;
-
 }
 
 
@@ -242,9 +205,7 @@ bool BoardSolvable(Board* board)
 //theoretical minimum clues for any Sudoku board is 17
 int ItNumRemove(int numClues, Board* board)
 {
-
 	srand(time(NULL));
-
 	
 	//it is impossible to solve a sudoku board with less than 17 clues
 	if (numClues < 17)
@@ -256,16 +217,12 @@ int ItNumRemove(int numClues, Board* board)
 
 	for (int i = 81; i > numClues; i--)
 	{
-
 		//maximum amount of tries to remove cells
 		int tries = 5;
-
-		
 
 		//try to remove cells from board up to an amount
 		while (tries > 0)
 		{
-
 			int* removeCell; //cell to be removed
 
 
@@ -296,17 +253,13 @@ int ItNumRemove(int numClues, Board* board)
 				*removeCell = cellRecall;
 				tries--;
 			}
-
 		}
 
 		if (tries == 0)
 		{
 			break;
 		}
-
 	}
-
-
+	
 	return 0;
-
 }
