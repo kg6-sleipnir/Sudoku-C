@@ -11,7 +11,6 @@ int GetInt(char* message)
 
 	while (1)
 	{
-
 		printf(message); //print the message before getting input
 
 		fgets(inputBuffer, MAX_CHAR, stdin); //get input
@@ -41,7 +40,5 @@ int GetInt(char* message)
 		}
 		
 		return returnInt;
-
 	}
-
 }
